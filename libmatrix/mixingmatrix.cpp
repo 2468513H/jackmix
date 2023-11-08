@@ -92,11 +92,7 @@ void Widget::replace( Element* n ) {
 	//qDebug( "Widget::replace( Element* %p )", n );
 	//qDebug( "This Element has %i selected neighbors.", n->neighbors() );
 	//qDebug( " and %i selected followers.", n->followers( n->neighbors() ) );
-	int s = 0;
-	std::string t = typeid(n).name();
-	if (n->_type =="AuxElement"){
-		s=1;
-	}
+
 
 	QStringList in, out;
 	in = n->neighborsList();
@@ -111,7 +107,7 @@ void Widget::replace( Element* n ) {
 				tmp->deleteLater();
 		}
 	}
-	createControl( in, out, s );
+	createControl( in, out, n->_type );
 	QTimer::singleShot( 1, this, SLOT( autoFill() ) );
 }
 
@@ -130,10 +126,10 @@ Element* Widget::getResponsible( QString in, QString out ) const {
 	return 0;
 }
 
-bool Widget::createControl( QStringList inchannels, QStringList outchannels, int state) {
+bool Widget::createControl( QStringList inchannels, QStringList outchannels, std::string ctrlType ) {
 	//qDebug( "Widget::createControl( QStringList '%s', QStringList '%s', %s)", qPrintable( inchannels.join( "," ) ), qPrintable( outchannels.join( "," ) ) );
 
-	QStringList controls = Global::the()->canCreate( inchannels.size(), outchannels.size(), state );
+	QStringList controls = Global::the()->canCreate( inchannels.size(), outchannels.size(), ctrlType );
 	if ( ! controls.isEmpty() ) {
 		//qDebug( "Found %s to control [%i,%i] channels", controls.front().toStdString().c_str(), inchannels.size(), outchannels.size() );
 		return Global::the()->create( controls.front(), inchannels, outchannels, this );
@@ -564,11 +560,11 @@ void Global::unregisterFactory( ElementFactory* n ) {
 	_factories.removeAll( n );
 }
 
-QStringList Global::canCreate( int in, int out, int state) {
+QStringList Global::canCreate( int in, int out, std::string ctrlType) {
 	//qDebug() << "Global::canCreate(" << in << "," << out << ")";
 	QStringList tmp;
 	for ( int i=0; i<_factories.size(); i++ )
-		tmp += _factories[ i ]->canCreate( in, out, state );
+		tmp += _factories[ i ]->canCreate( in, out, ctrlType );
 	//qDebug() << " returning" << tmp;
 	return tmp;
 }

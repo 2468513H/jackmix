@@ -35,6 +35,8 @@
 
 #include <QtCore/QDebug>
 
+#include<string>
+
 #include "backend_interface.h"
 #include "abstractslider.h"
 #include "midicontrolchannelassigner.h"
@@ -86,7 +88,7 @@ public:
 	
 	/// Create Controls
 	// Create controls. return true on success
-	bool createControl( QStringList inchannels, QStringList outchannels, int state = 0);
+	bool createControl( QStringList inchannels, QStringList outchannels, std::string ctrlType= "AuxElementSlider");
 
 	/// Layout
 	QSize smallestElement() const;
@@ -189,7 +191,7 @@ public:
 
 	/**
 	 * Do the things you need to do in the subclasses when the
-	 * selected state changes.
+	 * selected ctrlType changes.
 	 */
 	virtual void isSelected( bool ) {};
 
@@ -300,7 +302,7 @@ public:
 	 * Returns a list of the elements this factory can create and
 	 * which support the named number of in and out channels
 	 */
-	virtual QStringList canCreate( int in, int out,int state = 0 ) const =0;
+	virtual QStringList canCreate( int in, int out,std::string  = "AuxElementSlider" ) const =0;
 
 	/**
 	 * Returns an object of the given Elementtype or 0 if this factory can not create it.
