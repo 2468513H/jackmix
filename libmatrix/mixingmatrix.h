@@ -88,12 +88,8 @@ public:
 	
 	/// Create Controls
 	// Create controls. return true on success
-<<<<<<< HEAD
-	bool createControl( QStringList inchannels, QStringList outchannels, std::string ctrlType= "AuxElementSlider");
-=======
 	//takes a list of the input and output channels as well as ctrlType the type of the element currently in use
 	bool createControl( QStringList inchannels, QStringList outchannels, std::string ctrlType = "AuxElementSlider");
->>>>>>> master
 
 	/// Layout
 	QSize smallestElement() const;
@@ -307,12 +303,7 @@ public:
 	 * Returns a list of the elements this factory can create and
 	 * which support the named number of in and out channels
 	 */
-<<<<<<< HEAD
-	virtual QStringList canCreate( int in, int out,std::string  = "AuxElementSlider" ) const =0;
-=======
 	virtual QStringList canCreate( int in, int out,std::string ctrlType = "AuxElementSlider" ) const =0;
->>>>>>> master
-
 	/**
 	 * Returns an object of the given Elementtype or 0 if this factory can not create it.
 	 */
