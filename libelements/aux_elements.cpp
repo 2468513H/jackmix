@@ -57,6 +57,7 @@ public:
 	QStringList canCreate() const {
 		return QStringList()<<"AuxElement";
 	}
+
 	QStringList canCreate( int in, int out, std::string ctrlType = "AuxElementSlider" ) const {
 		if ( in==1 && out==1 && ctrlType=="AuxElementSlider") return QStringList()<<"AuxElement";
 		if ( in==1 && out==1 && ctrlType=="AuxElement") return QStringList()<<"AuxElementSlider";

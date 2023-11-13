@@ -92,7 +92,8 @@ void Widget::replace( Element* n ) {
 	//qDebug( "Widget::replace( Element* %p )", n );
 	//qDebug( "This Element has %i selected neighbors.", n->neighbors() );
 	//qDebug( " and %i selected followers.", n->followers( n->neighbors() ) );
-
+	//ctrlType used to represent the type of the element
+	std::string ctrlType = n->_type;
 
 	QStringList in, out;
 	in = n->neighborsList();
@@ -107,7 +108,8 @@ void Widget::replace( Element* n ) {
 				tmp->deleteLater();
 		}
 	}
-	createControl( in, out, n->_type );
+
+	createControl( in, out, ctrlType );
 	QTimer::singleShot( 1, this, SLOT( autoFill() ) );
 }
 
@@ -126,7 +128,7 @@ Element* Widget::getResponsible( QString in, QString out ) const {
 	return 0;
 }
 
-bool Widget::createControl( QStringList inchannels, QStringList outchannels, std::string ctrlType ) {
+bool Widget::createControl( QStringList inchannels, QStringList outchannels, std::string ctrlType) {
 	//qDebug( "Widget::createControl( QStringList '%s', QStringList '%s', %s)", qPrintable( inchannels.join( "," ) ), qPrintable( outchannels.join( "," ) ) );
 
 	QStringList controls = Global::the()->canCreate( inchannels.size(), outchannels.size(), ctrlType );
