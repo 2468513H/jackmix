@@ -80,6 +80,7 @@ Widget::~Widget() {
 void Widget::addElement( Element* n ) {
 	_elements.push_back( n );
 	connect( n, SIGNAL( replace( Element* ) ), this, SLOT( replace( Element* ) ) );
+	connect( n, SIGNAL( group( Element* ) ), this, SLOT( group( Element* ) ) );
 	connect( n, SIGNAL( explode( Element* ) ), this, SLOT( explode( Element* ) ) );
 	resizeEvent( 0 );
 }
@@ -109,6 +110,13 @@ void Widget::replace( Element* n ) {
 		}
 	}
 	createControl( in, out, ctrlType );
+	QTimer::singleShot( 1, this, SLOT( autoFill() ) );
+}
+
+void Widget::group( Element* n )  {
+	//qDebug()<<"Widget::explode slot\n";
+	
+	n->deleteLater();
 	QTimer::singleShot( 1, this, SLOT( autoFill() ) );
 }
 

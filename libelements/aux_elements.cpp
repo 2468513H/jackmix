@@ -86,6 +86,7 @@ AuxElement::AuxElement( QStringList inchannel, QStringList outchannel, MixingMat
 	if (p->mode() == Widget::Select) {
 		menu()->addAction( "Select", this, SLOT( slot_simple_select() ) );
 		menu()->addAction( "Replace", this, SLOT( slot_simple_replace() ) );
+		menu()->addAction( "Group", this, SLOT( slot_simple_group() ) );
 	}
 	menu()->addAction( "Assign MIDI Parameter", this, SLOT( slot_assign_midi_parameters() ) );
 
@@ -102,6 +103,7 @@ AuxElement::AuxElement( QStringList inchannel, QStringList outchannel, MixingMat
 	connect( _poti, SIGNAL( valueChanged( double ) ), this, SLOT( emitvalue( double ) ) );
 	connect( _poti, SIGNAL( select() ), this, SLOT( slot_simple_select() ) );
 	connect( _poti, SIGNAL( replace() ), this, SLOT( slot_simple_replace() ) );
+	connect( _poti, SIGNAL( group() ), this, SLOT( slot_simple_group() ) );
 	
 	midi_params.append(0);        // Initial MIDI paramater number
 	midi_delegates.append(_poti); //   for the potentiometer
@@ -132,6 +134,7 @@ AuxElementSlider::AuxElementSlider( QStringList inchannel, QStringList outchanne
 	if (p->mode() == Widget::Select) {
 		menu()->addAction( "Select", this, SLOT( slot_simple_select() ) );
 		menu()->addAction( "Replace", this, SLOT( slot_simple_replace() ) );
+		menu()->addAction( "Group", this, SLOT( slot_simple_group() ) );
 	}
 	menu()->addAction( "Assign MIDI Parameter", this, SLOT( slot_assign_midi_parameters() ) );
 
@@ -148,6 +151,7 @@ AuxElementSlider::AuxElementSlider( QStringList inchannel, QStringList outchanne
 	connect( _poti, SIGNAL( valueChanged( double ) ), this, SLOT( emitvalue( double ) ) );
 	connect( _poti, SIGNAL( select() ), this, SLOT( slot_simple_select() ) );
 	connect( _poti, SIGNAL( replace() ), this, SLOT( slot_simple_replace() ) );
+	connect( _poti, SIGNAL( group() ), this, SLOT( slot_simple_group() ) );
 	
 	midi_params.append(0);        // Initial MIDI paramater number
 	midi_delegates.append(_poti); //   for the potentiometer

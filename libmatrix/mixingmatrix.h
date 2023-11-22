@@ -124,6 +124,8 @@ signals:
 public slots:
         // Combine many elements to form a multichannel one
 	void replace( Element* );
+
+	void group(Element*)
         
         // Split a multichannel element into its constituents
         void explode( Element* );
@@ -226,6 +228,7 @@ public slots:
 
 signals:
 	void replace( Element* );
+	void group( Element* );
         void explode( Element* );
 	// Informs, that Element* n, Property s has changed.
 	void valueChanged( Element* n, QString s );
@@ -266,6 +269,7 @@ protected:
 protected slots:
 	// Use this slot if you don't want to do something before replacement.
 	virtual void slot_simple_replace() { replace( this ); }
+	virtual void slot_simple_group() { replace( this ); }
 	// Use this slot if you don't want to do something before explosion.
 	virtual void slot_simple_explode() { explode( this ); }
 	// Use this slot if you want a simple selection toggle
