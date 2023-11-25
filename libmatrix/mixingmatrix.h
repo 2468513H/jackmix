@@ -198,10 +198,12 @@ public:
 	int neighbors() const;
 	/** The inchannels of the neighbors */
 	QStringList neighborsList() const;
-	Element* nearestNeighbor() const;	/** returns the number of following rows with the given number
+	Element* nearestNeighbor() const;
+	/** returns the number of following rows with the given number
 	 * of selected items. */
 	int followers( int ) const;
 	QStringList followersList() const;
+	Element* nearestFollower() const;
 	/** Allow others to see our controlling midi parameters (but not change them) */
 	const QList<int>& midiParameters() const;
 	

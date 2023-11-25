@@ -532,6 +532,36 @@ QStringList Element::followersList() const {
 	return tmp;
 }
 
+Element* Element::nearestFollower() const {
+	int i=0;
+	int step= 1;
+	bool edgesDetected = false;
+	Element* neighbor = _parent->getResponsible( _parent->nextOut( _in[ _in.size()-1 ] ), _out[ 0 ] );
+	while(true){
+		if(neighbor->isSelected()){
+			return neighbor;
+		}
+		if(neighbor==NULL&& edgesDetected==false){
+			edgesDetected = true;
+		}
+		else if(neighbor==NULL&& edgesDetected==true){
+			return NULL;
+		}
+		if(edgesDetected==false){
+			step = -step;
+			if(i%2 == 0){
+				step = step + (step/abs(step));
+			}
+		}
+		else{
+			step = step + (step/abs(step));
+		}
+		neighbor = neighbor->_parent->getResponsible( neighbor->_parent->nextOut( neighbor->_in[ neighbor->_in.size()-1 ], step ), neighbor->_out[ 0 ] );
+		i++;
+	}
+	return NULL;
+}
+
 void Element::showMenu() {
 	_menu->exec( QCursor::pos() );
 }
