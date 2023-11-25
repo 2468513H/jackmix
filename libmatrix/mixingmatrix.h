@@ -68,8 +68,8 @@ public:
 
 	QStringList inchannels() const { return _inchannels; }
 	QStringList outchannels() const { return _outchannels; }
-	QString nextIn( QString ) const;
-	QString nextOut( QString ) const;
+	QString nextIn( QString n, int step = 1) const;
+	QString nextOut( QString n, int step = 1) const;
 	QString prevIn( QString n, int step = 1) const;
 	QString prevOut( QString n, int step = 1) const;
 
@@ -125,7 +125,7 @@ public slots:
         // Combine many elements to form a multichannel one
 	void replace( Element* );
 
-	void group(Element*)
+	void group(Element*);
         
         // Split a multichannel element into its constituents
         void explode( Element* );

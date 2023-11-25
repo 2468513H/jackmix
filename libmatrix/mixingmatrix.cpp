@@ -276,21 +276,21 @@ QSize Widget::smallestElement() const {
 	return QSize( w,h );
 }
 
-QString Widget::nextIn( QString n ) const {
+QString Widget::nextIn( QString n, int step  ) const {
 	//qDebug() << "Widget::nextIn(" << n << ")";
 	if ( n.isNull() )
 		return 0;
-	int i = _inchannels.indexOf( n ) + 1;
+	int i = _inchannels.indexOf( n ) + step;
 	//qDebug() << " i=" << i;
 	if ( i < _inchannels.size() )
 		return _inchannels.at( i );
 	return 0;
 }
-QString Widget::nextOut( QString n ) const {
+QString Widget::nextOut( QString n, int step  ) const {
 	//qDebug() << "Widget::nextOut(" << n << ")";
 	if ( n.isNull() )
 		return 0;
-	int i = _outchannels.indexOf( n ) + 1;
+	int i = _outchannels.indexOf( n ) + step;
 	if ( i<_outchannels.size() )
 		return _outchannels.at( i );
 	return 0;
@@ -485,6 +485,11 @@ QStringList Element::neighborsList() const {
 	}
 	return tmp;
 }
+
+Element* Element::nearestNeighbor() const {
+	return null;
+}
+
 int Element::followers( int n ) const {
 	if ( n==0 )
 		return 0;
