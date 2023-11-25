@@ -296,27 +296,6 @@ QString Widget::nextOut( QString n, int step  ) const {
 	return 0;
 }
 
-QString Widget::prevIn( QString n, int step ) const {
-	//qDebug() << "Widget::prevIn(" << n << ")";
-	if ( n.isNull() )
-		return 0;
-	int i = _inchannels.indexOf( n ) - step;
-	//qDebug() << " i=" << i;
-	if ((-1)< i && i < _inchannels.size() )
-		return _inchannels.at( i );
-	return 0;
-}
-QString Widget::prevOut( QString n, int step  ) const {
-	//qDebug() << "Widget::prevOut(" << n << ")";
-	if ( n.isNull() )
-		return 0;
-	int i = _outchannels.indexOf( n ) - step;
-	if ((-1)< i && i<_outchannels.size() )
-		return _outchannels.at( i );
-	return 0;
-}
-
-
 void Widget::addinchannel( QString name ) {
 	//qDebug() << "Widget::addinchannel(" << name << ")";
 	_inchannels.push_back( name );
@@ -468,10 +447,10 @@ QStringList Element::neighborsList() const {
 		neighbor = neighbor->_parent->getResponsible( neighbor->_parent->nextIn( neighbor->_in[ neighbor->_in.size()-1 ] ), neighbor->_out[ 0 ] );
 	}
 	//qDebug() << "Initial Neighbor Prev";
-	neighbor = _parent->getResponsible( _parent->prevIn( _in[ _in.size()-1 ] ), _out[ 0 ] );
+	neighbor = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ], -1), _out[ 0 ] );
 	//qDebug() << "While Neighbor Prev";
 	while ( neighbor && neighbor->isSelected() ){
-		int step = 1;
+		int step = -1;
 		Element* n = neighbor;
 		//check that neighbor is not the same as starting element
 		if(n!=this){
@@ -479,8 +458,8 @@ QStringList Element::neighborsList() const {
 		}
 		//check that getResponsible is giving a new neighbor element otherwise try again with larger step size
 		while (n== neighbor){
-			neighbor = neighbor->_parent->getResponsible( neighbor->_parent->prevIn( neighbor->_in[ neighbor->_in.size()-1 ], step ), neighbor->_out[ 0 ] );
-			step++;
+			neighbor = neighbor->_parent->getResponsible( neighbor->_parent->nextIn( neighbor->_in[ neighbor->_in.size()-1 ], step ), neighbor->_out[ 0 ] );
+			step--;
 		}
 	}
 	return tmp;
@@ -509,10 +488,10 @@ QStringList Element::followersList() const {
 		follower = follower->_parent->getResponsible( follower->_in[ 0 ], follower->_parent->nextOut(  follower->_out[  follower->_out.size()-1 ] ) );
 	}
 	//qDebug() << "Initial Follower Prev";
-	follower = _parent->getResponsible( _in[ 0 ], _parent->prevOut(  _out[  _out.size()-1 ] ) );
+	follower = _parent->getResponsible( _in[ 0 ], _parent->nextOut(  _out[  _out.size()-1 ] ,-1) );
 	//qDebug() << "While Follower Prev";
 	while ( follower && follower->isSelected() ){
-		int step = 1;
+		int step = -1;
 		Element* f = follower;
 		//check that follower is not the same as starting element
 		if(f!=this){
@@ -520,8 +499,8 @@ QStringList Element::followersList() const {
 		}
 		//check that getResponsible is giving a new follower element otherwise try again with larger step size
 		while (f== follower){	
-			follower = follower->_parent->getResponsible( follower->_in[ 0 ], follower->_parent->prevOut(  follower->_out[  follower->_out.size()-1 ] ,step) );
-			step++;
+			follower = follower->_parent->getResponsible( follower->_in[ 0 ], follower->_parent->nextOut(  follower->_out[  follower->_out.size()-1 ] ,step) );
+			step--;
 		}
 	}
 	return tmp;
