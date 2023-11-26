@@ -114,10 +114,18 @@ void Widget::replace( Element* n ) {
 }
 
 void Widget::group( Element* n )  {
-	//qDebug()<<"Widget::explode slot\n";
-	
-	n->deleteLater();
-	QTimer::singleShot( 1, this, SLOT( autoFill() ) );
+	Element* neighbor = n->nearestNeighbor();
+	Element* follower = n->nearestFollower();
+	if(!follower){
+		qDebug( "do nothing");
+	}
+	else if (neighbor){
+		Element* corner = getResponsible(neighbor->in()[0], follower->out()[0] );
+		qDebug()<< "create stereo2stereo using" <<n<<" "<<neighbor<<" "<<follower<<" "<<corner<<"" ;
+	}
+	else{
+		qDebug()<<"create mono2stereo using "<<n<<" "<<follower<<" ";
+	}
 }
 
 void Widget::explode( Element* n )  {
@@ -277,7 +285,7 @@ QSize Widget::smallestElement() const {
 }
 
 QString Widget::nextIn( QString n, int step  ) const {
-	//qDebug() << "Widget::nextIn(" << n << ")";
+	qDebug() << "Widget::nextIn(" << n << ")";
 	if ( n.isNull() )
 		return 0;
 	int i = _inchannels.indexOf( n ) + step;
