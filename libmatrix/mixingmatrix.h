@@ -269,7 +269,7 @@ protected:
 protected slots:
 	// Use this slot if you don't want to do something before replacement.
 	virtual void slot_simple_replace() { replace( this ); }
-	virtual void slot_simple_group() { replace( this ); }
+	virtual void slot_simple_group() { group( this ); }
 	// Use this slot if you don't want to do something before explosion.
 	virtual void slot_simple_explode() { explode( this ); }
 	// Use this slot if you want a simple selection toggle

@@ -285,7 +285,7 @@ QSize Widget::smallestElement() const {
 }
 
 QString Widget::nextIn( QString n, int step  ) const {
-	qDebug() << "Widget::nextIn(" << n << ")";
+	//qDebug() << "Widget::nextIn(" << n << ")";
 	if ( n.isNull() )
 		return 0;
 	int i = _inchannels.indexOf( n ) + step;

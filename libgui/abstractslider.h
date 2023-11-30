@@ -63,6 +63,8 @@ signals:
 	 *  slot_simple_replace
 	 */
 	void replace(void);
+
+	void group(void);
 	/** Propagate explode requests
 	 *  This signal would normally be connected to the responsible element's
 	 *  slot_simple_explode
