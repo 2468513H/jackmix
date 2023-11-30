@@ -290,7 +290,7 @@ QString Widget::nextIn( QString n, int step  ) const {
 		return 0;
 	int i = _inchannels.indexOf( n ) + step;
 	//qDebug() << " i=" << i;
-	if ( i < _inchannels.size() )
+	if ( (-1)<i&& i < _inchannels.size() )
 		return _inchannels.at( i );
 	return 0;
 }
@@ -299,7 +299,7 @@ QString Widget::nextOut( QString n, int step  ) const {
 	if ( n.isNull() )
 		return 0;
 	int i = _outchannels.indexOf( n ) + step;
-	if ( i<_outchannels.size() )
+	if ((-1)< i && i<_outchannels.size() )
 		return _outchannels.at( i );
 	return 0;
 }
