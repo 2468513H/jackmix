@@ -114,6 +114,7 @@ void Widget::replace( Element* n ) {
 }
 
 void Widget::group( Element* n )  {
+	qDebug( "\n\n\n\n\n\n\n\n\ngroup");
 	Element* neighbor = n->nearestNeighbor();
 	Element* follower = n->nearestFollower();
 	if(!follower){
@@ -136,7 +137,7 @@ void Widget::explode( Element* n )  {
 }
 
 Element* Widget::getResponsible( QString in, QString out ) const {
-	//qDebug() << "Widget::getResponsible(" << in << "," << out << ") size =" << _elements.size();
+	qDebug() << "Widget::getResponsible(" << in << "," << out << ") size =" << _elements.size();
 	for ( int i=0; i<_elements.size(); i++ )
 		if ( _elements[ i ] && _elements[ i ]->isResponsible( in, out ) )
 			return _elements[ i ];
@@ -472,34 +473,38 @@ QStringList Element::neighborsList() const {
 	}
 	return tmp;
 }
-
-Element* Element::nearestNeighbor() const {
-	int i=0;
-	int step= 1;
-	bool edgesDetected = false;
+/*Element* Element::nearestNeighbor() const {
 	Element* neighbor = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ] ), _out[ 0 ] );
-	while(true){
-		if(neighbor->isSelected()){
-			return neighbor;
+	while (!neighbor->isSelected() ){
+		if(!neighbor){
+			break;
 		}
-		if(neighbor==NULL&& edgesDetected==false){
-			edgesDetected = true;
-		}
-		else if(neighbor==NULL&& edgesDetected==true){
-			return NULL;
-		}
-		if(edgesDetected==false){
-			step = -step;
-			if(i%2 == 0){
-				step = step + (step/abs(step));
-			}
-		}
-		else{
-			step = step + (step/abs(step));
-		}
-		neighbor = neighbor->_parent->getResponsible( neighbor->_parent->nextIn( neighbor->_in[ neighbor->_in.size()-1 ], step ), neighbor->_out[ 0 ] );
-		i++;
+		neighbor = neighbor->_parent->getResponsible( neighbor->_parent->nextIn( neighbor->_in[ neighbor->_in.size()-1 ] ), neighbor->_out[ 0 ] );
 	}
+	(0)> step && step=this->_outchannels.size()
+return NULL;
+}*/
+Element* Element::nearestNeighbor() const {
+
+	Element* neighborL = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],-1 ), _out[ 0 ] );
+	Element* neighborR = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],1 ), _out[ 0 ] );
+	while(neighborL||neighborR){
+		if(neighborR && neighborR->isSelected()){
+			qDebug() << "return R";
+			return neighborR;
+		}
+		if(neighborL && neighborL->isSelected()){
+			qDebug() << "return L";
+			return neighborL;
+		}
+		if(neighborR){
+			qDebug() << "go R";
+			neighborR = neighborR->_parent->getResponsible( neighborR->_parent->nextIn( neighborR->_in[ neighborR->_in.size()-1 ],1 ), neighborR->_out[ 0 ] );}
+		if(neighborL){
+			qDebug() << "go L";
+			neighborL = neighborL->_parent->getResponsible( neighborL->_parent->nextIn( neighborL->_in[ neighborL->_in.size()-1 ],-1 ), neighborL->_out[ 0 ] );}
+	}
+	qDebug() << "return Null";
 	return NULL;
 }
 
@@ -541,32 +546,25 @@ QStringList Element::followersList() const {
 }
 
 Element* Element::nearestFollower() const {
-	int i=0;
-	int step= 1;
-	bool edgesDetected = false;
-	Element* neighbor = _parent->getResponsible( _parent->nextOut( _in[ _in.size()-1 ] ), _out[ 0 ] );
-	while(true){
-		if(neighbor->isSelected()){
-			return neighbor;
+	Element* followerL = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],-1 ), _out[ 0 ] );
+	Element* followerR = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],1 ), _out[ 0 ] );
+	while(followerL||followerR){
+		if(followerR && followerR->isSelected()){
+			qDebug() << "return R";
+			return followerR;
 		}
-		if(neighbor==NULL&& edgesDetected==false){
-			edgesDetected = true;
+		if(followerL && followerL->isSelected()){
+			qDebug() << "return L";
+			return followerL;
 		}
-		else if(neighbor==NULL&& edgesDetected==true){
-			return NULL;
-		}
-		if(edgesDetected==false){
-			step = -step;
-			if(i%2 == 0){
-				step = step + (step/abs(step));
-			}
-		}
-		else{
-			step = step + (step/abs(step));
-		}
-		neighbor = neighbor->_parent->getResponsible( neighbor->_parent->nextOut( neighbor->_in[ neighbor->_in.size()-1 ], step ), neighbor->_out[ 0 ] );
-		i++;
+		if(followerR){
+			qDebug() << "go R";
+			followerR = followerR->_parent->getResponsible( followerR->_parent->nextIn( followerR->_in[ followerR->_in.size()-1 ],1 ), followerR->_out[ 0 ] );}
+		if(followerL){
+			qDebug() << "go L";
+			followerL = followerL->_parent->getResponsible( followerL->_parent->nextIn( followerL->_in[ followerL->_in.size()-1 ],-1 ), followerL->_out[ 0 ] );}
 	}
+	qDebug() << "return Null";
 	return NULL;
 }
 
