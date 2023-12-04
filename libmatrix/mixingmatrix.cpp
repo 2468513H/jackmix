@@ -114,15 +114,19 @@ void Widget::replace( Element* n ) {
 }
 
 void Widget::group( Element* n )  {
-	qDebug( "\n\n\n\n\n\n\n\n\ngroup");
+	qDebug( "\ngroup");
 	Element* neighbor = n->nearestNeighbor();
 	Element* follower = n->nearestFollower();
 	if(!follower){
-		qDebug( "do nothing");
+		qDebug( "do nothing nothing selected");
 	}
 	else if (neighbor){
 		Element* corner = getResponsible(neighbor->in()[0], follower->out()[0] );
-		qDebug()<< "create stereo2stereo using" <<n<<" "<<neighbor<<" "<<follower<<" "<<corner<<"" ;
+		if(corner&&corner->isSelected()){
+		qDebug()<< "create stereo2stereo using" <<n<<" "<<neighbor<<" "<<follower<<" "<<corner<<"" ;}
+		else{
+			qDebug( "do nothing no corner");
+		}
 	}
 	else{
 		qDebug()<<"create mono2stereo using "<<n<<" "<<follower<<" ";
@@ -137,7 +141,7 @@ void Widget::explode( Element* n )  {
 }
 
 Element* Widget::getResponsible( QString in, QString out ) const {
-	qDebug() << "Widget::getResponsible(" << in << "," << out << ") size =" << _elements.size();
+	//qDebug() << "Widget::getResponsible(" << in << "," << out << ") size =" << _elements.size();
 	for ( int i=0; i<_elements.size(); i++ )
 		if ( _elements[ i ] && _elements[ i ]->isResponsible( in, out ) )
 			return _elements[ i ];
@@ -485,7 +489,7 @@ QStringList Element::neighborsList() const {
 return NULL;
 }*/
 Element* Element::nearestNeighbor() const {
-
+	qDebug( "\nnearestNeighbor");
 	Element* neighborL = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],-1 ), _out[ 0 ] );
 	Element* neighborR = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],1 ), _out[ 0 ] );
 	while(neighborL||neighborR){
@@ -546,23 +550,24 @@ QStringList Element::followersList() const {
 }
 
 Element* Element::nearestFollower() const {
-	Element* followerL = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],-1 ), _out[ 0 ] );
-	Element* followerR = _parent->getResponsible( _parent->nextIn( _in[ _in.size()-1 ],1 ), _out[ 0 ] );
-	while(followerL||followerR){
-		if(followerR && followerR->isSelected()){
-			qDebug() << "return R";
-			return followerR;
+	qDebug( "\nnearestfollower");
+	Element* followerU = _parent->getResponsible( _in[ 0 ], _parent->nextOut(  _out[  _out.size()-1 ] ,-1) );
+	Element* followerD = _parent->getResponsible( _in[ 0 ], _parent->nextOut(  _out[  _out.size()-1 ] ,1) );
+	while(followerU||followerD){
+		if(followerD && followerD->isSelected()){
+			qDebug() << "return D";
+			return followerD;
 		}
-		if(followerL && followerL->isSelected()){
-			qDebug() << "return L";
-			return followerL;
+		if(followerU && followerU->isSelected()){
+			qDebug() << "return U";
+			return followerU;
 		}
-		if(followerR){
-			qDebug() << "go R";
-			followerR = followerR->_parent->getResponsible( followerR->_parent->nextIn( followerR->_in[ followerR->_in.size()-1 ],1 ), followerR->_out[ 0 ] );}
-		if(followerL){
-			qDebug() << "go L";
-			followerL = followerL->_parent->getResponsible( followerL->_parent->nextIn( followerL->_in[ followerL->_in.size()-1 ],-1 ), followerL->_out[ 0 ] );}
+		if(followerD){
+			qDebug() << "go D";
+			followerD = followerD->_parent->getResponsible( followerD->_in[ 0 ], followerD->_parent->nextOut(  followerD->_out[  followerD->_out.size()-1 ] ,1) );}
+		if(followerU){
+			qDebug() << "go U";
+			followerU = followerU->_parent->getResponsible(followerU->_in[ 0 ], followerU->_parent->nextOut(  followerU->_out[  followerU->_out.size()-1 ] ,-1)  );}
 	}
 	qDebug() << "return Null";
 	return NULL;
